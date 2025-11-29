@@ -86,12 +86,7 @@ function EmployeeLoginContent() {
             Back to Login Options
           </Link>
 
-          {/* Logo */}
-          <div className="mb-10">
-            <div className="w-12 h-12 rounded-full bg-gray-900 flex items-center justify-center mb-4 shadow-soft">
-              <span className="text-white text-xl font-bold">N</span>
-            </div>
-          </div>
+     
 
           {/* Title */}
           <h1 className="text-4xl font-bold text-gray-900 mb-2 tracking-tight">Employee Login</h1>

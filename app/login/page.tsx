@@ -31,12 +31,7 @@ export default function LoginPage() {
       {/* Left Side - Login Options */}
       <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-8">
         <div className="w-full max-w-md">
-          {/* Logo */}
-          <div className="mb-10">
-            <div className="w-12 h-12 rounded-full bg-gray-900 flex items-center justify-center mb-4 shadow-soft">
-              <span className="text-white text-xl font-bold">N</span>
-            </div>
-          </div>
+         
 
           {/* Title */}
           <h1 className="text-4xl font-bold text-gray-900 mb-2 tracking-tight">Welcome Back</h1>
