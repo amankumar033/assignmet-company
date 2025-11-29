@@ -15,6 +15,7 @@ export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -23,11 +24,30 @@ export default function HamburgerMenu() {
       if (userData) {
         const parsed = JSON.parse(userData);
         setRole(parsed.role || null);
+        setUser(parsed);
       }
     } catch {
       setRole(null);
+      setUser(null);
     }
   }, []);
+
+  // Header navigation items (shown in hamburger menu on mobile)
+  const headerNavItems =
+    role === 'ADMIN'
+      ? [
+          { label: 'Home', href: '/' },
+          { label: 'Employees', href: '/employees' },
+          { label: 'Analytics', href: '/analytics' },
+          { label: 'Reports', href: '/reports' },
+          { label: 'Settings', href: '/settings' },
+        ]
+      : [
+          { label: 'Home', href: '/' },
+          { label: 'Analytics', href: '/analytics' },
+          { label: 'Reports', href: '/reports' },
+          { label: 'Settings', href: '/settings' },
+        ];
 
   const menuItems: MenuItem[] = [
     {
@@ -104,8 +124,15 @@ export default function HamburgerMenu() {
             style={{ zIndex: 9999 }}
           >
             <div className="p-6 bg-gradient-to-b from-blue-50/50 to-white">
-              <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-900">Menu</h2>
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Menu</h2>
+                  {user && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      {user.username} <span className="text-blue-600">({user.role})</span>
+                    </p>
+                  )}
+                </div>
                 <button
                   onClick={() => setIsOpen(false)}
                   className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700 hover:bg-gradient-to-r hover:from-gray-200 hover:to-gray-100 transition-all duration-300 transform hover:scale-110 hover:-translate-y-0.5 hover:shadow-soft"
@@ -113,6 +140,39 @@ export default function HamburgerMenu() {
                   ✕
                 </button>
               </div>
+
+              {/* Header Navigation Items - Shown in hamburger menu on mobile */}
+              <div className="lg:hidden mb-6 pb-6 border-b border-gray-200">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-4">
+                  Quick Navigation
+                </h3>
+                <ul className="space-y-1">
+                  {headerNavItems.map((item) => {
+                    const isActive =
+                      pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
+                    return (
+                      <li key={item.label}>
+                        <Link
+                          href={item.href || '#'}
+                          className={`block px-4 py-2.5 rounded-lg transition-all duration-300 hover:translate-x-2 ${
+                            isActive
+                              ? 'text-white bg-gradient-to-r from-blue-600 to-blue-700 shadow-soft'
+                              : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-white hover:text-blue-700 hover:shadow-soft'
+                          } font-medium`}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+
+              {/* Main Menu Items */}
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-4">
+                Menu
+              </h3>
               <ul className="space-y-2">
                 {menuItems.map((item) => (
                   <li key={item.label}>
