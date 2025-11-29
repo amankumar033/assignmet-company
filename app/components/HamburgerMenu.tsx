@@ -11,36 +11,55 @@ interface MenuItem {
   submenu?: MenuItem[];
 }
 
-const menuItems: MenuItem[] = [
-  {
-    label: 'Dashboard',
-    href: '/',
-  },
-  {
-    label: 'Employees',
-    submenu: [
-      { label: 'All Employees', href: '/employees' },
-      { label: 'Add Employee', href: '/employees/add' },
-      { label: 'Reports', href: '/employees/reports' },
-    ],
-  },
-  {
-    label: 'Settings',
-    submenu: [
-      { label: 'Profile', href: '/settings/profile' },
-      { label: 'Preferences', href: '/settings/preferences' },
-    ],
-  },
-  {
-    label: 'Help',
-    href: '/help',
-  },
-];
-
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    try {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const parsed = JSON.parse(userData);
+        setRole(parsed.role || null);
+      }
+    } catch {
+      setRole(null);
+    }
+  }, []);
+
+  const menuItems: MenuItem[] = [
+    {
+      label: 'Dashboard',
+      href: '/',
+    },
+    {
+      label: 'Employees',
+      submenu:
+        role === 'ADMIN'
+          ? [
+              { label: 'All Employees', href: '/employees' },
+              { label: 'Add Employee', href: '/employees/add' },
+              { label: 'Reports', href: '/employees/reports' },
+            ]
+          : [
+              // For employees, only show a simple reports link under Employees
+              { label: 'Reports', href: '/employees/reports' },
+            ],
+    },
+    {
+      label: 'Settings',
+      submenu: [
+        { label: 'Profile', href: '/settings/profile' },
+        { label: 'Preferences', href: '/settings/preferences' },
+      ],
+    },
+    {
+      label: 'Help',
+      href: '/help',
+    },
+  ];
 
   const toggleSubmenu = (label: string) => {
     setOpenSubmenu(openSubmenu === label ? null : label);

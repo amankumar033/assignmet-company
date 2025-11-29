@@ -124,6 +124,9 @@ export default function EmployeesPage() {
               <EmployeeGridView
                 employees={data.employees.employees}
                 onEmployeeClick={handleEmployeeClick}
+                onEdit={user?.role === 'ADMIN' ? handleEdit : undefined}
+                onFlag={handleFlag}
+                onDelete={user?.role === 'ADMIN' ? handleDelete : undefined}
               />
             ) : (
               <EmployeeTileView

@@ -104,29 +104,39 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-6">
               <HamburgerMenu />
-              <Link href="/" className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-all duration-500 header-content">
-                Employee Management
+              <Link
+                href="/"
+                className="text-xl font-bold text-gray-900 hover:text-blue-600 transition-all duration-500 header-content"
+              >
+                {user?.role === 'EMPLOYEE' ? 'Employee Portal' : 'Employee Management'}
               </Link>
             </div>
-            
+
             {/* Navigation Menu in Header */}
             <div className="flex items-center space-x-2 flex-1 justify-center px-8 header-content">
-              {[
-                { label: 'Home', href: '/' },
-                { label: 'Employees', href: '/employees' },
-                { label: 'Analytics', href: '/analytics' },
-                { label: 'Reports', href: '/reports' },
-                { label: 'Settings', href: '/settings' },
-              ].map((item) => {
-                const isActive = pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
+              {(user?.role === 'ADMIN'
+                ? [
+                    { label: 'Home', href: '/' },
+                    { label: 'Employees', href: '/employees' },
+                    { label: 'Analytics', href: '/analytics' },
+                    { label: 'Reports', href: '/reports' },
+                    { label: 'Settings', href: '/settings' },
+                  ]
+                : [
+                    { label: 'Home', href: '/' },
+                    { label: 'Analytics', href: '/analytics' },
+                    { label: 'Reports', href: '/reports' },
+                    { label: 'Settings', href: '/settings' },
+                  ]
+              ).map((item) => {
+                const isActive =
+                  pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
                 return (
                   <Link
                     key={item.label}
                     href={item.href}
                     className={`px-4 py-2 text-sm font-medium transition-all duration-300 relative group ${
-                      isActive
-                        ? 'text-blue-600'
-                        : 'text-gray-600 hover:text-gray-900'
+                      isActive ? 'text-blue-600' : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
                     {item.label}
